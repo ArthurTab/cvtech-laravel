@@ -1,6 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\{
+    CvtechqueController,
+    CompetenceController,
+};
 
 /*
 |--------------------------------------------------------------------------
@@ -12,7 +16,11 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+//
+//Route::get('/', function () {
+//    return view('welcome');
+//});
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [CvtechqueController::class, 'index'])->name('accueil');
+
+Route::resource('competences', CompetenceController::class);
