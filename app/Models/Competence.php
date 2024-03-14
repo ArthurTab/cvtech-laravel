@@ -10,7 +10,7 @@ class Competence extends Model
     use HasFactory;
 
     protected $fillable = [
-        'intule',
+        'intitule',
         'description',
     ];
 }

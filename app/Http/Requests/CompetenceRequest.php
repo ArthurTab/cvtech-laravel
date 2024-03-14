@@ -26,4 +26,16 @@ class CompetenceRequest extends FormRequest
             'description' => ['required', 'string', 'max:500'],
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'description.required' => 'La rubrique "Description" est obligatoire.',
+            'description.string' => 'La rubrique "Description" est une chaine de caractères.',
+            'description.max' => 'La rubrique "Description" est une chaine de caractères de 120 caractères maximum.',
+            'intitule.required' => 'La rubrique "Intitulé" est obligatoire.',
+            'intitule.string' => 'La rubrique "Description" est une chaine de caractère.',
+            'intitule.max' => 'La rubrique "Description" est une chaine de caractères de 500 caractères maximum.',
+        ];
+    }
 }
