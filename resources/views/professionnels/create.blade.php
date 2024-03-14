@@ -86,12 +86,23 @@
                                             </div>
                                         </div>
                                         <div class="flex flex-row w-full items-start justify-between space-x-24">
-                                            <div class="flex flex-col w-full space-y-2">
-                                                <label for="naissance" class="text-white text-xl">Date de
-                                                    naissance :</label>
-                                                <input type="date" name="naissance" id="naissance" value="{{old('naissance')}}"
-                                                       class="rounded-lg bg-gray-600 border border-gray-700 text-white w-full p-2">
-                                                @error('naissance')
+                                            <div class="flex flex-col w-full space-y-4">
+                                                <label for="domaine" class="text-white text-xl">Domaine :</label>
+                                                <div class="flex flex-row w-full space-x-12 justify-start">
+                                                    <div class="flex flex-row space-x-3 items-center">
+                                                        <div class="text-white text-xl"> S :</div>
+                                                        <input type="checkbox" name="domaine[]" value="S">
+                                                    </div>
+                                                    <div class="flex flex-row space-x-3 items-center">
+                                                        <div class="text-white text-xl"> R :</div>
+                                                        <input type="checkbox" name="domaine[]" value="R">
+                                                    </div>
+                                                    <div class="flex flex-row space-x-3 items-center">
+                                                        <div class="text-white text-xl"> D :</div>
+                                                        <input type="checkbox" name="domaine[]" value="D">
+                                                    </div>
+                                                </div>
+                                                @error('domaine')
                                                 <div
                                                     class="text-red-500 p-2 text-start w-full mx-6 rounded-lg my-1">{{$message}}</div>
                                                 @enderror
@@ -144,23 +155,12 @@
                                             </div>
                                         </div>
                                         <div class="flex flex-row w-full items-start justify-between space-x-24">
-                                            <div class="flex flex-col w-full space-y-4">
-                                                <label for="domaine" class="text-white text-xl">Domaine :</label>
-                                                <div class="flex flex-row w-full space-x-12 justify-start">
-                                                    <div class="flex flex-row space-x-3 items-center">
-                                                        <div class="text-white text-xl"> S :</div>
-                                                        <input type="checkbox" name="domaine[]" value="S">
-                                                    </div>
-                                                    <div class="flex flex-row space-x-3 items-center">
-                                                        <div class="text-white text-xl"> R :</div>
-                                                        <input type="checkbox" name="domaine[]" value="R">
-                                                    </div>
-                                                    <div class="flex flex-row space-x-3 items-center">
-                                                        <div class="text-white text-xl"> D :</div>
-                                                        <input type="checkbox" name="domaine[]" value="D">
-                                                    </div>
-                                                </div>
-                                                @error('domaine')
+                                            <div class="flex flex-col w-full space-y-2">
+                                                <label for="naissance" class="text-white text-xl">Date de
+                                                    naissance :</label>
+                                                <input type="date" name="naissance" id="naissance" value="{{old('naissance')}}"
+                                                       class="rounded-lg bg-gray-600 border border-gray-700 text-white w-full p-2">
+                                                @error('naissance')
                                                 <div
                                                     class="text-red-500 p-2 text-start w-full mx-6 rounded-lg my-1">{{$message}}</div>
                                                 @enderror
@@ -174,10 +174,12 @@
                                                     class="text-red-500 p-2 text-start w-full mx-6 rounded-lg my-1">{{$message}}</div>
                                                 @enderror
                                             </div>
+                                        </div>
+                                        <div class="flex flex-row w-full items-start justify-between space-x-24">
                                             <div class="flex flex-col w-full space-y-2">
                                                 <label for="metier_id" class="text-white text-xl">Métier :</label>
                                                 @if(!empty($metiers))
-                                                    <select name="metier_id" id="metier_id">
+                                                    <select name="metier_id" id="metier_id" class="p-4 rounded-xl">
                                                         <option value="0">Tous
                                                             les métiers
                                                         </option>
@@ -189,6 +191,26 @@
                                                         @endforeach
                                                     </select>
                                                     @error('metier_id')
+                                                    <div
+                                                        class="text-red-500 p-2 text-start w-full mx-6 rounded-lg my-1">{{$message}}</div>
+                                                    @enderror
+                                                @endif
+                                            </div>
+                                            <div class="flex flex-col w-full space-y-2">
+                                                <label for="comp" class="text-white text-xl">Compétences (sélection multiple) :</label>
+                                                @if(!empty($competences))
+                                                    <select name="comp[]" id="comp" class="p-4 rounded-xl" multiple>
+                                                        <option value="0" class="font-bold">Toutes
+                                                            les compétences
+                                                        </option>
+                                                        @foreach($competences as $c)
+                                                            <option
+                                                                value="{{$c->id}}">
+                                                                {{$c->intitule}}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                    @error('comp')
                                                     <div
                                                         class="text-red-500 p-2 text-start w-full mx-6 rounded-lg my-1">{{$message}}</div>
                                                     @enderror

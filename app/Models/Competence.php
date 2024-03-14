@@ -13,4 +13,8 @@ class Competence extends Model
         'intitule',
         'description',
     ];
+
+    public function professionnels(){
+        return $this->belongsToMany(Professionnel::class)->withTimestamps();
+    }
 }

@@ -6,6 +6,7 @@ use App\Http\Requests\MetierRequest;
 use Illuminate\Http\Request;
 use App\Models\{
     Professionnel,
+    Competence,
     Metier,
 };
 use App\Http\Requests\ProfessionnelRequest;
@@ -38,13 +39,15 @@ class ProfessionnelController extends Controller
      */
     public function create()
     {
+        $competences = Competence::orderBy('intitule')->get();
         $metiers = Metier::all();
         $data = [
             'metiers' => $metiers,
             'formname' => 'Création d\'un professionnel',
             'title' => 'Création d\'un professionnel | ' . config('app.name'),
             'description' => 'Création d\'un professionnel | ' . config('app.name'),
-            'menuactive' => '4'
+            'menuactive' => '4',
+            'competences' => $competences,
         ];
         return view('professionnels.create', $data);
     }
@@ -61,7 +64,8 @@ class ProfessionnelController extends Controller
             $validatedData['formation'] = 0;
         }
         $validatedData['domaine'] = implode(',', $professionnelRequest->domaine);
-        Professionnel::create($validatedData);
+        $pro = Professionnel::create($validatedData);
+        $pro->competences()->attach($professionnelRequest->comp);
         return redirect()->route('professionnels.index')->withSucces('Professionnel créé avec succès.');
     }
 
@@ -83,6 +87,7 @@ class ProfessionnelController extends Controller
      */
     public function edit(Professionnel $professionnel)
     {
+        $competences = Competence::orderBy('intitule')->get();
         $professionnel->domaine = explode(',', $professionnel->domaine);
         $metiers = Metier::all();
         $data = [
@@ -91,7 +96,9 @@ class ProfessionnelController extends Controller
             'title' => 'Edition d\'un professionnel | ' . config('app.name'),
             'description' => 'Edition d\'un professionnel | ' . config('app.name'),
             'pro' => $professionnel,
-            'menuactive' => '4'
+            'procomp' => $professionnel->competences,
+            'menuactive' => '4',
+            'competences' => $competences
         ];
         return view('professionnels.edit', $data);
     }
@@ -109,6 +116,7 @@ class ProfessionnelController extends Controller
         }
         $validatedData['domaine'] = implode(',', $professionnelRequest->domaine);
         $professionnel->update($validatedData);
+        $professionnel->competences()->sync($professionnelRequest->comp);
         return redirect()->route('professionnels.index')->withSucces('Professionnel modifié avec succès.');
     }
 

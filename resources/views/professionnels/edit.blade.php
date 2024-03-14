@@ -92,17 +92,34 @@
                                             </div>
                                         </div>
                                         <div class="flex flex-row w-full items-start justify-between space-x-24">
-                                            <div class="flex flex-col w-full space-y-2">
-                                                <label for="naissance" class="text-white text-xl">Date de
-                                                    naissance :</label>
-                                                <input type="date" name="naissance" id="naissance"
-                                                       class="rounded-lg bg-gray-600 border border-gray-700 text-white w-full p-2"
-                                                       value="{{$pro->naissance}}">
-                                                @error('naissance')
+                                            <div class="flex flex-col w-full space-y-4">
+                                                <label for="domaine" class="text-white text-xl">Domaine :</label>
+                                                <div class="flex flex-row w-full space-x-12 justify-start">
+                                                    <div class="flex flex-row space-x-3 items-center">
+                                                        <div class="text-white text-xl"> S :</div>
+                                                        <input type="checkbox" name="domaine[]" value="S"
+                                                            {{is_array(old('domaine', $pro->domaine)) && in_array('S', old('domaine', $pro->domaine)) ? 'checked' : ''}}
+                                                        >
+                                                    </div>
+                                                    <div class="flex flex-row space-x-3 items-center">
+                                                        <div class="text-white text-xl"> R :</div>
+                                                        <input type="checkbox" name="domaine[]" value="R"
+                                                            {{is_array(old('domaine', $pro->domaine)) && in_array('R', old('domaine', $pro->domaine)) ? 'checked' : ''}}
+                                                        >
+                                                    </div>
+                                                    <div class="flex flex-row space-x-3 items-center">
+                                                        <div class="text-white text-xl"> D :</div>
+                                                        <input type="checkbox" name="domaine[]" value="D"
+                                                            {{is_array(old('domaine', $pro->domaine)) && in_array('D', old('domaine', $pro->domaine)) ? 'checked' : ''}}
+                                                        >
+                                                    </div>
+                                                </div>
+                                                @error('domaine')
                                                 <div
                                                     class="text-red-500 p-2 text-start w-full mx-6 rounded-lg my-1">{{$message}}</div>
                                                 @enderror
                                             </div>
+
                                             <div class="flex flex-col w-full space-y-2">
                                                 <label for="formation" class="text-white text-xl">Formation :</label>
                                                 <label
@@ -152,29 +169,13 @@
                                             </div>
                                         </div>
                                         <div class="flex flex-row w-full items-start justify-between space-x-24">
-                                            <div class="flex flex-col w-full space-y-4">
-                                                <label for="domaine" class="text-white text-xl">Domaine :</label>
-                                                <div class="flex flex-row w-full space-x-12 justify-start">
-                                                    <div class="flex flex-row space-x-3 items-center">
-                                                        <div class="text-white text-xl"> S :</div>
-                                                        <input type="checkbox" name="domaine[]" value="S"
-                                                            {{is_array(old('domaine', $pro->domaine)) && in_array('S', old('domaine', $pro->domaine)) ? 'checked' : ''}}
-                                                        >
-                                                    </div>
-                                                    <div class="flex flex-row space-x-3 items-center">
-                                                        <div class="text-white text-xl"> R :</div>
-                                                        <input type="checkbox" name="domaine[]" value="R"
-                                                        {{is_array(old('domaine', $pro->domaine)) && in_array('R', old('domaine', $pro->domaine)) ? 'checked' : ''}}
-                                                        >
-                                                    </div>
-                                                    <div class="flex flex-row space-x-3 items-center">
-                                                        <div class="text-white text-xl"> D :</div>
-                                                        <input type="checkbox" name="domaine[]" value="D"
-                                                            {{is_array(old('domaine', $pro->domaine)) && in_array('D', old('domaine', $pro->domaine)) ? 'checked' : ''}}
-                                                        >
-                                                    </div>
-                                                </div>
-                                                @error('domaine')
+                                            <div class="flex flex-col w-full space-y-2">
+                                                <label for="naissance" class="text-white text-xl">Date de
+                                                    naissance :</label>
+                                                <input type="date" name="naissance" id="naissance"
+                                                       class="rounded-lg bg-gray-600 border border-gray-700 text-white w-full p-2"
+                                                       value="{{$pro->naissance}}">
+                                                @error('naissance')
                                                 <div
                                                     class="text-red-500 p-2 text-start w-full mx-6 rounded-lg my-1">{{$message}}</div>
                                                 @enderror
@@ -189,6 +190,8 @@
                                                     class="text-red-500 p-2 text-start w-full mx-6 rounded-lg my-1">{{$message}}</div>
                                                 @enderror
                                             </div>
+                                        </div>
+                                        <div class="flex flex-row w-full items-start justify-between space-x-24">
                                             <div class="flex flex-col w-full space-y-2">
                                                 <label for="metier_id" class="text-white text-xl">Métier :</label>
                                                 @if(!empty($metiers))
@@ -209,7 +212,35 @@
                                                     @enderror
                                                 @endif
                                             </div>
+                                            <div class="flex flex-col w-full space-y-2">
+                                                <label for="comp" class="text-white text-xl">Compétences (sélection multiple) :</label>
+                                                @if(!empty($competences))
+                                                    <select name="comp[]" id="comp" class="p-4 rounded-xl" multiple>
+                                                        <option value="0" class="font-bold">Toutes
+                                                            les compétences
+                                                        </option>
+                                                        @foreach($competences as $c)
+                                                            <option
+                                                                value="{{$c->id}}"
+                                                            @foreach($procomp as $pc)
+                                                                @if($pc['id'] == $c->id)
+                                                                    selected
+                                                                @endif
+                                                            @endforeach
+                                                            >
+                                                                {{$c->intitule}}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                    @error('comp')
+                                                    <div
+                                                        class="text-red-500 p-2 text-start w-full mx-6 rounded-lg my-1">{{$message}}</div>
+                                                    @enderror
+                                                @endif
+                                            </div>
+
                                         </div>
+
                                         <div class="flex flex-col w-full space-y-2">
                                             <label for="observation" class="text-white text-xl">Observation : </label>
                                             <textarea rows="5"

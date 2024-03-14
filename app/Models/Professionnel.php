@@ -28,4 +28,8 @@ class Professionnel extends Model
     public function metier(){
         return $this->belongsTo(Metier::class);
     }
+
+    public function competences(){
+        return $this->belongsToMany(Competence::class)->withTimestamps();
+    }
 }
