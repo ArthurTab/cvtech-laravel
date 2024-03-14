@@ -86,6 +86,7 @@
                             @endforelse
                             </tbody>
                         </table>
+                        {{$competences->links()}}
                     </div>
                 </div>
             </div>

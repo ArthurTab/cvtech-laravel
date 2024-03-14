@@ -27,7 +27,7 @@ class CompetenceController extends Controller
 //        $competences = Competence::find(5);
 //        $competences = Competence::first();
         $countcompetences = Competence::count();
-        $competences = Competence::orderBy('id', 'desc')->get(); // get() c'est la même méthode que all(), sauf qu'on peut mettre des conditions, ou des ORDER BY
+        $competences = Competence::paginate(4); // get() c'est la même méthode que all(), sauf qu'on peut mettre des conditions, ou des ORDER BY
         return view('competences.index', [
             'competences' => $competences,
             'count' => $countcompetences,
