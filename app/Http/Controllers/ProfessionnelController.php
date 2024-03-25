@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\MetierRequest;
 use Illuminate\Http\Request;
 use App\Models\{
@@ -21,12 +22,48 @@ class ProfessionnelController extends Controller
         $pro = $slug ?
             Metier::where('slug', $slug)->firstOrFail()->professionnels()->get() :
             Professionnel::get();
-
         $combometiers = Metier::all();
+        $combocompetences = Competence::all();
         return view('professionnels.index', [
             'pro' => $pro,
             'metiers' => $combometiers,
             'slug' => $slug,
+            'comp' => $combocompetences,
+            'idcomp' => '',
+            'tablename' => 'Table des professionnels',
+            'title' => config("app.name") . ' | Liste des professionnels',
+            'description' => 'Retrouvez tous les professionnels de ' . config("app.name"),
+            'menuactive' => '4'
+        ]);
+    }
+
+    public function search(Request $request){
+        $professionnels = Professionnel::where('nom', 'LIKE', "%{$request->input('search')}%")->orWhere('prenom', 'LIKE', "%{$request->input('search')}%")->get();
+        $combometiers = Metier::all();
+        return view('professionnels.index', [
+            'pro' => $professionnels,
+            'metiers' => $combometiers,
+            'slug' => '',
+            'idcomp' => '',
+            'tablename' => 'Table des professionnels',
+            'title' => config("app.name") . ' | Liste des professionnels',
+            'description' => 'Retrouvez tous les professionnels de ' . config("app.name"),
+            'menuactive' => '4'
+        ]);
+    }
+
+    public function searchcomp(Request $request){
+        $competences = Competence::where('intitule', 'LIKE', "%{$request->input('comp')}%")->get();
+        $ids = $competences->pluck('id');
+        $professionnels = Professionnel::whereHas('competences', function($query) use ($ids) {
+            $query->whereIn('competence_id', $ids);
+        })->get();
+        $combometiers = Metier::all();
+        return view('professionnels.index', [
+            'pro' => $professionnels,
+            'metiers' => $combometiers,
+            'slug' => '',
+            'idcomp' => '',
             'tablename' => 'Table des professionnels',
             'title' => config("app.name") . ' | Liste des professionnels',
             'description' => 'Retrouvez tous les professionnels de ' . config("app.name"),
@@ -64,6 +101,10 @@ class ProfessionnelController extends Controller
             $validatedData['formation'] = 0;
         }
         $validatedData['domaine'] = implode(',', $professionnelRequest->domaine);
+        if ($professionnelRequest->hasFile('cv') && $professionnelRequest->file('cv')->isValid()) {
+            $chemin = $professionnelRequest->cv->store('public/cv');
+            $validatedData['cv_path'] = $chemin;
+        }
         $pro = Professionnel::create($validatedData);
         $pro->competences()->attach($professionnelRequest->comp);
         return redirect()->route('professionnels.index')->withSucces('Professionnel créé avec succès.');
@@ -115,6 +156,13 @@ class ProfessionnelController extends Controller
             $validatedData['formation'] = 0;
         }
         $validatedData['domaine'] = implode(',', $professionnelRequest->domaine);
+        if ($professionnelRequest->hasFile('cv') && $professionnelRequest->file('cv')->isValid()) {
+            if ($professionnel->cv_path && Storage::exists($professionnel->cv_path)) {
+                Storage::delete($professionnel->cv_path);
+            }
+            $chemin = $professionnelRequest->cv->store('public/cv');
+            $validatedData['cv_path'] = $chemin;
+        }
         $professionnel->update($validatedData);
         $professionnel->competences()->sync($professionnelRequest->comp);
         return redirect()->route('professionnels.index')->withSucces('Professionnel modifié avec succès.');

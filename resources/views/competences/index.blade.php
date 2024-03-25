@@ -13,7 +13,27 @@
                 @if(session('succes'))
                     <div class="w-full mx-4 p-4 bg-red-200 text-white">{{session('succes')}}</div>
                 @endif
-                <a href="{{route('competences.create')}}" class="bg-white rounded-lg p-2 text-center text-black w-24 mx-6">Créer</a>
+                <div class="flex flex-row">
+                    <a href="{{route('competences.create')}}"
+                       class="bg-white rounded-lg p-2 text-center text-black w-24 mx-6">Créer</a>
+                    @if(!empty($professionnels))
+                        <div class="flex flex-row items-center justify-center gap-3">
+                            <label class="text-white">Rechercher des compétences en fonction d'un professionnel : </label>
+                            <select onchange="location.href=this.value" class="w-52 p-2">
+                                <option value="{{ route('competences.index') }}" @unless($id) selected @endunless>Tous
+                                    les professionnels
+                                </option>
+                                @foreach($professionnels as $pro)
+                                    <option value="{{ route('competences.professionnel', ['id' => $pro->id]) }}"
+                                            @if($id == $pro->id) selected @endif>
+                                        {{ $pro->prenom . ' ' . $pro->nom }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    @endif
+
+                </div>
                 <div class="flex-auto px-0 pt-0 pb-2">
                     <div class="p-0 overflow-x-auto">
                         <table

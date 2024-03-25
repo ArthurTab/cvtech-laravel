@@ -76,6 +76,9 @@
                             <label for="prenom" class="text-white text-xl">Observation</label>
                             <div class="rounded-lg bg-gray-600 border border-gray-700 text-white w-full p-2">{{$pro->observation}}</div>
                         </div>
+                        @if($pro->cv_path)
+                            <a href="{{ asset('storage/'.Illuminate\Support\Str::after($pro->cv_path, 'public/')) }}" target="_blank">Voir le CV</a>
+                        @endif
                     </div>
                 </div>
             </div>

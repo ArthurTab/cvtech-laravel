@@ -22,6 +22,7 @@ class Professionnel extends Model
         'source',
         'observation',
         'metier_id',
+        'cv_path',
     ];
 
     // La méthode métier (au singulier) permet de trouver le métier auquel appartient (belongsTo) le professionnel

@@ -35,7 +35,8 @@ class ProfessionnelRequest extends FormRequest
             'naissance' => ['required', 'date_format:Y-m-d'],
             'domaine' => ['required'],
             'metier_id' => ['required'],
-            'comp'=>['required']
+            'comp'=>['required'],
+            'cv' => 'nullable|file|mimes:pdf|max:2048'
         ];
     }
 }

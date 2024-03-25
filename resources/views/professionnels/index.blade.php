@@ -11,22 +11,36 @@
                     <h6 class="text-white">{{$tablename ?? ''}}</h6>
                 </div>
                 @if(session('succes'))
-                    <div class="mx-auto mt-4 mb-8 w-11/12 p-4 bg-green-400 border rounded-lg border-green-600 text-white">{{session('succes')}}</div>
+                    <div
+                        class="mx-auto mt-4 mb-8 w-11/12 p-4 bg-green-400 border rounded-lg border-green-600 text-white">{{session('succes')}}</div>
                 @endif
-                <div class="flex flex-row">
-                    <a href="{{route('professionnels.create')}}"
-                       class="bg-white rounded-lg p-2 text-center text-black w-24 mx-6">Créer</a>
-                    @if(!empty($metiers))
-                        <select onchange="location.href=this.value" class="w-52">
-                            <option value="{{route('professionnels.index')}}" @unless($slug) selected @endunless>Tous
-                                les métiers
-                            </option>
-                            @foreach($metiers as $m)
-                                <option
-                                    value="{{route('professionnels.metiers', ['slug'=>$m->slug])}} {{($slug == $m->slug) ? 'selected' : ''}}">{{$m->libelle}}</option>
-                            @endforeach
-                        </select>
-                    @endif
+                <div class="flex flex-col gap-6 p-4">
+                    <div class="flex flex-col">
+                        <a href="{{route('professionnels.create')}}"
+                           class="bg-white rounded-lg p-2 text-center text-black w-24 mx-6">Créer</a>
+                        @if(!empty($metiers))
+                            <div class="flex flex-row items-center gap-3">
+                                <label class="text-white">Rechercher par métier :</label>
+                                <select onchange="location.href=this.value" class="w-52">
+                                    <option value="{{route('professionnels.index')}}"
+                                            @unless($slug) selected @endunless>
+                                        Tous
+                                        les métiers
+                                    </option>
+                                    @foreach($metiers as $m)
+                                        <option
+                                            value="{{route('professionnels.metiers', ['slug'=>$m->slug])}} {{($slug == $m->slug) ? 'selected' : ''}}">{{$m->libelle}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        @endif
+                    </div>
+                    <form action="{{route('professionnels.competences')}}" method="post" class="flex flex-row items-center gap-3">
+                        @csrf
+                        @method('POST')
+                        <label class="text-white">Rechercher par compétences :</label>
+                        <input type="text" placeholder="Compétence" name="comp">
+                    </form>
                 </div>
                 <div class="flex-auto px-0 pt-0 pb-2">
                     <div class="p-0 overflow-x-auto">

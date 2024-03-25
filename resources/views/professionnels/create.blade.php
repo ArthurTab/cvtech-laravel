@@ -19,7 +19,7 @@
                     </div>
                     <div class="flex-auto p-6">
                         <div class="flex flex-wrap -mx-3">
-                            <form action="{{ route('professionnels.store')}}" method="post" role="form"
+                            <form action="{{ route('professionnels.store')}}" method="post" role="form" enctype="multipart/form-data"
                                   class="w-full">
                                 <div class="w-full max-w-full px-3 shrink-0 md:flex-0">
                                     @csrf
@@ -91,15 +91,15 @@
                                                 <div class="flex flex-row w-full space-x-12 justify-start">
                                                     <div class="flex flex-row space-x-3 items-center">
                                                         <div class="text-white text-xl"> S :</div>
-                                                        <input type="checkbox" name="domaine[]" value="S">
+                                                        <input type="checkbox" name="domaine[]" value="S" {{ is_array(old('domaine')) && in_array('S', old('domaine')) ? 'checked' : '' }}>
                                                     </div>
                                                     <div class="flex flex-row space-x-3 items-center">
                                                         <div class="text-white text-xl"> R :</div>
-                                                        <input type="checkbox" name="domaine[]" value="R">
+                                                        <input type="checkbox" name="domaine[]" value="R" {{ is_array(old('domaine')) && in_array('R', old('domaine')) ? 'checked' : '' }}>
                                                     </div>
                                                     <div class="flex flex-row space-x-3 items-center">
                                                         <div class="text-white text-xl"> D :</div>
-                                                        <input type="checkbox" name="domaine[]" value="D">
+                                                        <input type="checkbox" name="domaine[]" value="D" {{ is_array(old('domaine')) && in_array('D', old('domaine')) ? 'checked' : '' }}>
                                                     </div>
                                                 </div>
                                                 @error('domaine')
@@ -117,6 +117,7 @@
                                                         name="formation[]"
                                                         type="checkbox"
                                                         id="formation"
+                                                        {{ is_array(old('formation')) && in_array('on', old('formation')) ? 'checked' : '' }}
                                                         class="peer sr-only [&:checked_+_span_svg[data-checked-icon]]:block [&:checked_+_span_svg[data-unchecked-icon]]:hidden"
                                                     />
 
@@ -185,7 +186,7 @@
                                                         </option>
                                                         @foreach($metiers as $m)
                                                             <option
-                                                                value="{{$m->id}}">
+                                                                value="{{$m->id}}" {{ old('metier_id') == $m->id ? 'selected' : '' }}>
                                                                 {{$m->libelle}}
                                                             </option>
                                                         @endforeach
@@ -205,7 +206,8 @@
                                                         </option>
                                                         @foreach($competences as $c)
                                                             <option
-                                                                value="{{$c->id}}">
+                                                                value="{{$c->id}}"
+                                                                {{ in_array($c->id, old('comp', [])) ? 'selected' : '' }}>
                                                                 {{$c->intitule}}
                                                             </option>
                                                         @endforeach
@@ -229,6 +231,14 @@
                                             @enderror
 
                                         </div>
+                                        <div>
+                                            <label for="cv">CV (format PDF) :</label>
+                                            <input type="file" id="cv" name="cv" accept=".pdf">
+                                        </div>
+                                        @error('cv')
+                                        <div
+                                            class="text-red-500 p-2 text-start w-full mx-6 rounded-lg my-1">{{$message}}</div>
+                                        @enderror
 
                                     </div>
                                     <button type="submit" class="p-2 bg-blue-500 text-white rounded-lg">Créer

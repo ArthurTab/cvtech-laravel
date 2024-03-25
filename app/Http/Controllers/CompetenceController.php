@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\{
-    Competence
+    Competence,
+    Professionnel
 };
 use App\Http\Requests\{
     CompetenceRequest
@@ -15,7 +16,7 @@ class CompetenceController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($id='')
     {
 //        $competences = Competence::all(); //Méthode static où on ne peut pas faire de "WHERE ...", on peut choisir les colonnes qu'on veut SELECT, mais on a TOUS les enregistrements
 //        $competences = Competence::all('intitule');
@@ -26,12 +27,17 @@ class CompetenceController extends Controller
 //        $competences = Competence::where('description', 'LIKE', '%PHP%')->count();
 //        $competences = Competence::find(5);
 //        $competences = Competence::first();
-        $countcompetences = Competence::count();
-        $competences = Competence::paginate(4); // get() c'est la même méthode que all(), sauf qu'on peut mettre des conditions, ou des ORDER BY
+        if($id) {
+            $competences = Professionnel::findOrFail($id)->competences()->paginate(12);
+        } else {
+            $competences = Competence::paginate(12);
+        }
+        $professionnels = Professionnel::all();
         return view('competences.index', [
             'competences' => $competences,
-            'count' => $countcompetences,
             'tablename' => 'Table des compétences',
+            'id' => $id,
+            'professionnels' => $professionnels,
             'title' => config("app.name") . ' | Liste des compétences',
             'description' => 'Retrouvez toutes les compétences de ' . config("app.name"),
             'menuactive' => '2'

@@ -19,7 +19,7 @@
                     </div>
                     <div class="flex-auto p-6">
                         <div class="flex flex-wrap -mx-3">
-                            <form action="{{ route('professionnels.update', $pro->id )}}" method="post" role="form"
+                            <form action="{{ route('professionnels.update', $pro->id )}}" method="post" role="form" enctype="multipart/form-data"
                                   class="w-full">
                                 <div class="w-full max-w-full px-3 shrink-0 md:flex-0">
                                     @csrf
@@ -30,7 +30,7 @@
                                                 <label for="prenom" class="text-white text-xl">Prénom :</label>
                                                 <input type="text" name="prenom" id="prenom"
                                                        class="rounded-lg bg-gray-600 border border-gray-700 text-white w-full p-2"
-                                                       value="{{$pro->prenom}}">
+                                                       value="{{ old('prenom', $pro->prenom) }}">
                                                 @error('prenom')
                                                 <div
                                                     class="text-red-500 p-2 text-start w-full mx-6 rounded-lg my-1">{{$message}}</div>
@@ -40,7 +40,7 @@
                                                 <label for="nom" class="text-white text-xl">Nom :</label>
                                                 <input type="text" name="nom" id="nom"
                                                        class="rounded-lg bg-gray-600 border border-gray-700 text-white w-full p-2"
-                                                       value="{{$pro->nom}}">
+                                                       value="{{ old('nom', $pro->nom) }}">
                                                 @error('nom')
                                                 <div
                                                     class="text-red-500 p-2 text-start w-full mx-6 rounded-lg my-1">{{$message}}</div>
@@ -52,7 +52,7 @@
                                                 <label for="cp" class="text-white text-xl">Code postal :</label>
                                                 <input type="text" name="cp" id="cp"
                                                        class="rounded-lg bg-gray-600 border border-gray-700 text-white w-full p-2"
-                                                       value="{{$pro->cp}}">
+                                                       value="{{ old('cp', $pro->cp) }}">
                                                 @error('cp')
                                                 <div
                                                     class="text-red-500 p-2 text-start w-full mx-6 rounded-lg my-1">{{$message}}</div>
@@ -62,7 +62,7 @@
                                                 <label for="ville" class="text-white text-xl">Ville :</label>
                                                 <input type="text" name="ville" id="ville"
                                                        class="rounded-lg bg-gray-600 border border-gray-700 text-white w-full p-2"
-                                                       value="{{$pro->ville}}">
+                                                       value="{{ old('ville', $pro->ville) }}">
                                                 @error('ville')
                                                 <div
                                                     class="text-red-500 p-2 text-start w-full mx-6 rounded-lg my-1">{{$message}}</div>
@@ -74,7 +74,7 @@
                                                 <label for="telephone" class="text-white text-xl">Téléphone :</label>
                                                 <input type="text" name="telephone" id="telephone"
                                                        class="rounded-lg bg-gray-600 border border-gray-700 text-white w-full p-2"
-                                                       value="{{$pro->telephone}}">
+                                                       value="{{ old('telephone', $pro->telephone) }}">
                                                 @error('telephones')
                                                 <div
                                                     class="text-red-500 p-2 text-start w-full mx-6 rounded-lg my-1">{{$message}}</div>
@@ -84,7 +84,7 @@
                                                 <label for="email" class="text-white text-xl">Adresse mail :</label>
                                                 <input type="text" name="email" id="email"
                                                        class="rounded-lg bg-gray-600 border border-gray-700 text-white w-full p-2"
-                                                       value="{{$pro->email}}">
+                                                       value="{{ old('email', $pro->email) }}">
                                                 @error('email')
                                                 <div
                                                     class="text-red-500 p-2 text-start w-full mx-6 rounded-lg my-1">{{$message}}</div>
@@ -174,7 +174,7 @@
                                                     naissance :</label>
                                                 <input type="date" name="naissance" id="naissance"
                                                        class="rounded-lg bg-gray-600 border border-gray-700 text-white w-full p-2"
-                                                       value="{{$pro->naissance}}">
+                                                       value="{{ old('naissance', $pro->naissance) }}">
                                                 @error('naissance')
                                                 <div
                                                     class="text-red-500 p-2 text-start w-full mx-6 rounded-lg my-1">{{$message}}</div>
@@ -184,7 +184,7 @@
                                                 <label for="source" class="text-white text-xl">Source :</label>
                                                 <input type="text" name="source" id="source"
                                                        class="rounded-lg bg-gray-600 border border-gray-700 text-white w-full p-2"
-                                                       value="{{$pro->source}}">
+                                                       value="{{ old('source', $pro->source) }}">
                                                 @error('source')
                                                 <div
                                                     class="text-red-500 p-2 text-start w-full mx-6 rounded-lg my-1">{{$message}}</div>
@@ -201,7 +201,7 @@
                                                         </option>
                                                         @foreach($metiers as $m)
                                                             <option
-                                                                value="{{$m->id}}" {{$pro->metier_id == $m->id ? 'selected' : ''}}>
+                                                                value="{{$m->id}}" {{ old('metier_id', $pro->metier_id) == $m->id ? 'selected' : '' }}>
                                                                 {{$m->libelle}}
                                                             </option>
                                                         @endforeach
@@ -246,7 +246,7 @@
                                             <textarea rows="5"
                                                       class="rounded-lg bg-gray-600 border border-gray-700 text-white w-full p-2"
                                                       name="observation"
-                                                      id="observation">{{$pro->observation}}</textarea>
+                                                      id="observation">{{ old('observation', $pro->observation) }}</textarea>
                                             @error('observation')
                                             <div
                                                 class="text-red-500 p-2 text-start w-full mx-6 rounded-lg my-1">{{$message}}</div>
@@ -255,6 +255,14 @@
                                         </div>
 
                                     </div>
+                                    <div>
+                                        <label for="cv">CV (format PDF) :</label>
+                                        <input type="file" id="cv" name="cv" accept=".pdf">
+                                    </div>
+                                    @error('cv')
+                                    <div
+                                        class="text-red-500 p-2 text-start w-full mx-6 rounded-lg my-1">{{$message}}</div>
+                                    @enderror
                                     <button type="submit" class="p-2 bg-blue-500 text-white rounded-lg">Modifier
                                     </button>
                                 </div>
